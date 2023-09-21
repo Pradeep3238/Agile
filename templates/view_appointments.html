@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Appointments</title>
+</head>
+<body>
+    
+    <h1>Appointments for {{ session['user_name'] }}</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Patient Name</th>
+                <th>Appointment Date and Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appointment in appointments %}
+            <tr>
+                <td>{{ appointment.patient_name }}</td>
+                <td>{{ appointment.appointment_datetime }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('Doctor') }}">Back to Doctor Dashboard</a>
+</body>
+</html>
