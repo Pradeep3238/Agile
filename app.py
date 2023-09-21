@@ -33,7 +33,7 @@ temp_user={}
 
 @app.route('/')
 def Home():
-	return render_template('./signup.html')
+	return render_template('./index.html')
 
 @app.route('/signup/admin', methods=['GET', 'POST'])
 def admin_signup():
@@ -318,9 +318,7 @@ def Admin():
 	return render_template('./admin_dashboard.html')
 
 
-@app.route('/index')
-def Index():
-	return render_template('./index.html')
+
 
 
 if __name__ == '__main__':
