@@ -8,27 +8,8 @@
 	<!-- Boxicons -->
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 	<!-- My CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin_dashboard.css') }}">
-    <style>
-        /* Add custom styles if needed */
-        body {
-            background-color: #f8f9fa;
-        }
 
-        .sidebar {
-            background-color: #fff;
-        }
-
-        .nav-heading {
-            color: #333;
-        }
-
-        .navbar {
-            background-color: #fff;
-        }
-    </style>
 	<title>Digital Healthcare Systems</title>
 </head>
 <body>
@@ -116,6 +97,10 @@
 						</li>
 					</ul>
 				</div>
+				<button id="openDateModal" class="btn-download">
+					<i class='bx bxs-cloud-download' ></i>
+					<span class="text">Download Reports</span>
+				</button>
 			</div>
 		
 			<!-- Create a modal for the date input field -->
@@ -131,42 +116,46 @@
 			</div>
 
 			</div>
-            <div class="row">
-                <!-- My Profile -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <img src="pro.jpg" alt="Doctor Image" class="card-img-top">
-                            <h5 class="card-title">My Profile</h5>
-                            <a href="#myProfile" class="btn btn-primary btn-block">Update Profile</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <img src="appointments.jpg" alt="Appointments Image" class="img-fluid mb-2">
-                            <h5 class="card-title">My Appointments</h5>
-                            <a href="{{url_for('display_appointments')}}" class="btn btn-primary btn-block">View History</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Prescription History -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <img src="booking.jpg" alt="Booking Image" class="img-fluid mb-2">
-                            <h5 class="card-title">Book Appointments</h5>
-                            <a href="{{url_for('book_appointment')}}" class="btn btn-primary btn-block">Book Appointment</a>
-                        </div>
-                    </div>
+
+            <div class="card">
+                <div class="card-body text-center">
+                    <img src="appointments.jpg" alt="Appointments Image" class="img-fluid mb-2">
+                    <h5 class="card-title">My Appointments</h5>
+                    <a href="{{url_for('display_appointments')}}" class="btn btn-primary btn-block">View History</a>
                 </div>
             </div>
-            
-            
 
 
-	
+			<div class="table-data">
+				<div class="order">
+					<div class="head">
+						<h3>Recent Appointments</h3>
+						<i class='bx bx-search' ></i>
+						<i class='bx bx-filter' ></i>
+					</div>
+					<table>
+						<thead>
+							<tr>
+								<th>Patient</th>
+								<th>Date & Time</th>
+								<th>Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for appointment in appointments %}
+                    			<tr>
+									<td>
+										<img src="img/patient.png">
+										<p>{{ appointment.patient_name }}</p>
+									</td>
+									<td>{{ appointment.appointment_datetime }}</td>
+									<td><span style="color: black;" class="status">{{ appointment.status }}</span></td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</main>
 	</section>
 	<script src="{{ url_for('static', filename='js/admin_dashboard.js') }}"></script>

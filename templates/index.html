@@ -56,7 +56,7 @@
     <div class="row">
         <div class="col-md-4">
             <div class="registration-card">
-                <a href="/admin_signup">
+                <a href="{{url_for('admin_signup')}}">
                     <img src="{{ url_for('static', filename='images/admin.png') }}" alt="Admin" class="img-fluid rounded-circle avatar-img">
                     <h3>Admin</h3>
                 </a>
@@ -64,7 +64,7 @@
         </div>
         <div class="col-md-4">
             <div class="registration-card">
-                <a href="/doctor_signup">
+                <a href="{{url_for('doctor_signup')}}">
                     <img src="{{ url_for('static', filename='images/doctor.png') }}" alt="Doctor" class="img-fluid rounded-circle avatar-img">
                     <h3>Doctor</h3>
                 </a>
@@ -72,7 +72,7 @@
         </div>
         <div class="col-md-4">
             <div class="registration-card">
-                <a href="/patient_signup">
+                <a href="{{url_for('patient_signup')}}">
                     <img src="{{ url_for('static', filename='images/patient.png') }}" alt="Patient" class="img-fluid rounded-circle avatar-img">
                     <h3>Patient</h3>
                 </a>

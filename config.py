@@ -1,5 +1,5 @@
 class Config:
-    SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:password@localhost:3306/agile'
+    SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:@localhost:3306/agile'
 
 
     MAIL_SERVER = 'smtp.gmail.com'
@@ -8,4 +8,4 @@ class Config:
     MAIL_USE_SSL = False
     MAIL_USERNAME = 'd.pradeep3238@gmail.com'
     MAIL_PASSWORD = 'mxmnwmxlrsdqnipm'
-    MAIL_DEFAULT_SENDER = 'd.pradeep3238@gmail.com'
+    MAIL_DEFAULT_SENDER = 'd.pradeep3238@gmail.com' 
