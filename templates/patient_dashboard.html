@@ -1,4 +1,9 @@
 
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,28 +12,29 @@
 
 	<!-- Boxicons -->
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<style>
+		/* Add custom styles if needed */
+		body {
+			background-color: #f8f9fa;
+		}
+
+		.sidebar {
+			background-color: #fff;
+		}
+
+		.nav-heading {
+			color: #333;
+		}
+
+		.navbar {
+			background-color: #fff;
+		}
+	</style>
 	<!-- My CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="{{ url_for('static', filename='styles/doctor_dashboard.css') }}">
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin_dashboard.css') }}">
-    <style>
-        /* Add custom styles if needed */
-        body {
-            background-color: #f8f9fa;
-        }
-
-        .sidebar {
-            background-color: #fff;
-        }
-
-        .nav-heading {
-            color: #333;
-        }
-
-        .navbar {
-            background-color: #fff;
-        }
-    </style>
 	<title>Digital Healthcare Systems</title>
 </head>
 <body>
@@ -42,31 +48,25 @@
 		</a>
 		<ul class="side-menu top">
 			<li class="active">
-				<a href="#">
+				<a href="{{ url_for('Patient')}}">
 					<i class='bx bxs-dashboard' ></i>
 					<span class="text">Dashboard</span>
 				</a>
 			</li>
-			<li>
-				<a href="{{ url_for('view_appointments') }}">
+			<li >
+				<a href="{{ url_for('display_appointments') }}">
 					<i class='bx bxs-calendar' ></i>
 					<span class="text">Appointments</span>
 				</a>
 			</li>
-			<li>
-				<a href="#">
+			<li >
+				<a href="{{ url_for('view_doctors') }}">
 					<i class='bx bxs-user' ></i>
-					<span class="text">Patients</span>
+					<span class="text">Doctors</span>
 				</a>
 			</li>
 			<li>
-				<a href="#">
-					<i class='bx bxs-cog' ></i>
-					<span class="text">Settings</span>
-				</a>
-			</li>
-			<li>
-				<a href="#" class="logout">
+				<a href="{{url_for('Logout')}}" class="logout">
 					<i class='bx bxs-log-out-circle' ></i>
 					<span class="text">Logout</span>
 				</a>
@@ -105,68 +105,51 @@
 		<main>
 			<div class="head-title">
 				<div class="left">
-					<h1>Dotor Dashboard</h1>
+					<h1>Patient Dashboard</h1>
 					<ul class="breadcrumb">
 						<li>
 							<a href="#">Dashboard</a>
 						</li>
 						<li><i class='bx bx-chevron-right' ></i></li>
 						<li>
-							<a class="active" href="#">Home</a>
+							<a class="active" href="#">Doctors</a>
 						</li>
 					</ul>
 				</div>
 			</div>
 		
-			<!-- Create a modal for the date input field -->
-			<div id="dateModal" class="modal">
-				<div class="modal-content">
-					<span class="close" id="closeDateModal">&times;</span>
-					<h2>Select Date</h2>
-					<form action="{{ url_for('download_reports') }}" method="GET">
-						<input type="date" name="date" required>
-						<button type="submit">Download</button>
-					</form>
+
+
+			</div>
+
+			<div class="table-data">
+				<div class="order">
+							<div class="card-body text-center">
+								<img src="appointments.jpg" alt="Appointments Image" class="img-fluid mb-2">
+								<h5 class="card-title">My Appointments</h5>
+								<a href="{{url_for('display_appointments')}}" class="btn btn-primary btn-block">View History</a>
+						</div>
 				</div>
+				<div class="order">
+							<div class="card-body text-center">
+								<img src="booking.jpg" alt="Booking Image" class="img-fluid mb-2">
+								<h5 class="card-title">Book Appointments</h5>
+								<a href="{{url_for('book_appointment')}}" class="btn btn-primary btn-block">Book Appointment</a>
+							</div>
+				</div>	
+					<!-- <div class="row">
+						<div class="col-md-4">
+							<div class="card">
+								<div class="card-body text-center">
+									<img src="pro.jpg" alt="Doctor Image" class="card-img-top">
+									<h5 class="card-title">My Profile</h5>
+									<a href="#myProfile" class="btn btn-primary btn-block">Update Profile</a>
+								</div>
+							</div>
+						</div>
+						</div> -->
 			</div>
-
 			</div>
-            <div class="row">
-                <!-- My Profile -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <img src="pro.jpg" alt="Doctor Image" class="card-img-top">
-                            <h5 class="card-title">My Profile</h5>
-                            <a href="#myProfile" class="btn btn-primary btn-block">Update Profile</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <img src="appointments.jpg" alt="Appointments Image" class="img-fluid mb-2">
-                            <h5 class="card-title">My Appointments</h5>
-                            <a href="{{url_for('display_appointments')}}" class="btn btn-primary btn-block">View History</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Prescription History -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <img src="booking.jpg" alt="Booking Image" class="img-fluid mb-2">
-                            <h5 class="card-title">Book Appointments</h5>
-                            <a href="{{url_for('book_appointment')}}" class="btn btn-primary btn-block">Book Appointment</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            
-
-
-	
 		</main>
 	</section>
 	<script src="{{ url_for('static', filename='js/admin_dashboard.js') }}"></script>

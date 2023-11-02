@@ -1,5 +1,5 @@
 class Config:
-    SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:@localhost:3306/agile'
+    SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://pradeep:password@localhost:3306/agile'
 
 
     MAIL_SERVER = 'smtp.gmail.com'
