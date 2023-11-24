@@ -1,8 +1,9 @@
 
-from flask import Flask,  redirect,render_template,request, session, url_for,jsonify
+from flask import Flask,redirect,render_template,request, session, url_for,jsonify, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate 
 from flask_mail import Mail,Message
+from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from cachetools import LRUCache
 import os
@@ -185,7 +186,11 @@ def book_appointment():
             appointment=models.Appointment(patient_name=patient_name,patient_email=patient_email,phone_number=phone_number,doctor_name=doctor_name,health_issue=health_issue,appointment_datetime=booking_datetime)
             db.session.add(appointment)
             db.session.commit()
+            flash('Appointment booked successfully!', 'success')
 
+            # Redirect to the same page to display the success message
+            return redirect(url_for('book_appointment'))
+         
 
         return render_template('book_appointment.html',specialities=specialities,doctors=doctors,patient_name=patient_name)
     else:
@@ -239,19 +244,23 @@ def view_patients():
         return "You are not authorized to access this page."
 
 
-
 @app.route('/download_reports', methods=['GET'])
 def download_reports():
     if 'user_id' in session and 'user_role' in session and session['user_role'] == 'doctor':
         doctor_name = session['user_name']
-        selected_date = request.args.get('date')  # Get the selected date from the query parameters
+        selected_date_str = request.args.get('date')
+
+        try:
+            # Convert the selected date string to a datetime object
+            selected_date = datetime.strptime(selected_date_str, '%Y-%m-%d').date()
+        except ValueError:
+            return "Invalid date format."
 
         # Fetch the doctor's appointments for the selected date from the database
-        appointments = models.Appointment.query.filter_by(doctor_name=doctor_name, appointment_datetime=selected_date).all()
+        appointments = models.Appointment.query.filter_by(doctor_name=doctor_name).all()
 
-        if not appointments:
-            return "No appointments found for the selected date."
-
+        # Filter appointments for the selected date
+        selected_appointments = [appointment for appointment in appointments if appointment.appointment_datetime.date() == selected_date]
 
         folder_path = 'doctor_downloads'
         if not os.path.exists(folder_path):
@@ -260,16 +269,16 @@ def download_reports():
         file_name = f'{doctor_name}_appointments_{selected_date}.csv'
         file_path = os.path.join(folder_path, file_name)
         with open(file_path, 'w', newline='') as csvfile:
-            fieldnames = ['Patient','Health Issue', 'Date & Time', 'Status']
+            fieldnames = ['Patient', 'Health Issue', 'Date & Time', 'Status']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
             writer.writeheader()
-            for appointment in appointments:
+            for appointment in selected_appointments:
                 writer.writerow({
                     'Patient': appointment.patient_name,
-                    'Health Issue':appointment.health_issue,
+                    'Health Issue': appointment.health_issue,
                     'Date & Time': appointment.appointment_datetime,
-                    'Status': appointment.status  # Adjust the field name as per your model
+                    'Status': appointment.status
                 })
 
         # Create a response to serve the file for download
@@ -285,7 +294,6 @@ def download_reports():
     else:
         # Handle unauthorized access or display a message
         return "You are not authorized to access this page."
-    
 
 @app.route('/patient_dashboard')
 def Patient():
@@ -323,13 +331,21 @@ def send_prescription():
                 if appointment:
                     appointment.status = 'Completed'
                     db.session.commit()
+                    
+                    flash('Prescription sent successfully!', 'success')
+
                     return jsonify({'message': 'Prescription sent and appointment updated.'})
                 else:
                     return jsonify({'error': 'Appointment not found.'})
+                    
             except Exception as e:
+                flash('Error sending prescription. Please try again later.', 'error')
                 return jsonify({'error': 'Error sending email.'})
+        
+        flash('Invalid request.', 'error')
         return jsonify({'message': 'Prescription sent and appointment updated.'})
-
+    
+    flash('Invalid request.', 'error')
     return jsonify({'error': 'Unauthorized'})
 
 if __name__ == '__main__':
